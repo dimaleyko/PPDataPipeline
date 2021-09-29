@@ -23,12 +23,12 @@ def main(argv = None):
             yield hash_property_id, data_element
 
     with beam.Pipeline() as p:
-        pp_complete_id = (
+        pp_transformed = (
                             p
                             | "Read from Text" >> ReadFromText(known_args.input)
                             | "Add Property ID" >> beam.ParDo(AddPropertyID())
+                            | "Write to File" >> WriteToText(known_args.output)
         )
-        pp_complete_id | WriteToText(known_args.output)
 
 if __name__ == '__main__':
     main()

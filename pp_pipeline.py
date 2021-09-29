@@ -1,6 +1,7 @@
 import argparse
 import csv
 import hashlib
+import json
 import apache_beam as beam
 from apache_beam.io import ReadFromText
 from apache_beam.io import WriteToText
@@ -22,12 +23,19 @@ def main(argv = None):
                 data_element = dict(zip(dict_keys, line))                                                                            
             yield hash_property_id, data_element
 
+    class JSONCreate(beam.DoFn):
+        def process(self, data_element):
+            hash_property_id, data_element = data_element
+            combined_data_json_object = {'PropertyID': hash_property_id, 'Transactions': data_element}                                                
+            return [json.dumps(combined_data_json_object)]
+
     with beam.Pipeline() as p:
         pp_transformed = (
                             p
                             | "Read from Text" >> ReadFromText(known_args.input)
                             | "Add Property ID" >> beam.ParDo(AddPropertyID())
                             | "Group by ID" >> beam.GroupByKey()
+                            | "Convert to JSON" >> beam.ParDo(JSONCreate())
                             | "Write to File" >> WriteToText(known_args.output)
         )
 

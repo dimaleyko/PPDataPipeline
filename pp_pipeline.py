@@ -27,6 +27,7 @@ def main(argv = None):
                             p
                             | "Read from Text" >> ReadFromText(known_args.input)
                             | "Add Property ID" >> beam.ParDo(AddPropertyID())
+                            | "Group by ID" >> beam.GroupByKey()
                             | "Write to File" >> WriteToText(known_args.output)
         )
 

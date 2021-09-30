@@ -25,7 +25,7 @@ def main(argv = None):
                 hash_property_id = hashlib.sha1(str.encode(', '.join(line[7:14] + [line[3]]))).hexdigest()                          
                 #Adding keys to the data for ease of json conversion at a later point                                                                                                                                                                                                                                                
                 data_element = dict(zip(dict_keys, line))                                                                                                                                                 
-            yield hash_property_id, data_element
+                yield hash_property_id, data_element
 
     class JSONCreate(beam.DoFn):
         def process(self, data_element):

@@ -18,7 +18,7 @@ def main(argv = None):
 
     class AddPropertyID(beam.DoFn):
         def process(self, data_element):
-            #Splitting data_element into an itterable list
+            #Splitting data_element into an iterable list
             for line in csv.reader([data_element], quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True):
                 #Assuming that address fields do not change for the same property throughout the years,
                 #generating unique hash based on the adress string to use as Property ID      
